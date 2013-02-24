@@ -34,8 +34,12 @@ case "$1" in
 		command echo "- PHP Curl libraries"
 		command echo "- Wordpress installation"
 		command echo ""
-		command echo "/!\ Don't forget to add 'wrush' to your bash profile like :"
+		command echo "Add 'wrush' to your bash profile like :"
 		command echo "   alias wrush='/path/to/wrush/run.sh'"
+		command echo ""
+		command echo "Change run.sh variable APP_ROOT with your wrush root"
+		command echo "/!\ Be careful on noexec on your system mount /!\"
+		command echo ""
 		;;
 	*)
 		command echo "Wrush v$VERSION : Developped by Nassim A. (http://nassi.me)"
