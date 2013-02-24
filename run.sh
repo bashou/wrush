@@ -1,6 +1,6 @@
 #!/bin/sh
 VERSION='1.0'
-APP_ROOT="/root/wrush"
+APP_ROOT="/path/to/wrush"
 TMP_WPCONFIG="/tmp/wrush_wp_vars.php"
 PWD=`pwd`
 ROOT="$PWD/wp-config.php"
@@ -10,8 +10,8 @@ case "$1" in
 		if [ ! -f $ROOT ];
 		then
 			command echo "Wrush v$VERSION : Developped by Nassim A. (http://nassi.me)"
-		    command echo "Wrush : You're not appear to be in Wordpress Path Installation"
-		    exit 0
+			command echo "Wrush : You're not appear to be in Wordpress Path Installation"
+			exit 0
 		fi
 
 		# Create Temp WP-Config.php
@@ -35,10 +35,10 @@ case "$1" in
 		command echo "- Wordpress installation"
 		command echo ""
 		command echo "Add 'wrush' to your bash profile like :"
-		command echo "   alias wrush='/path/to/wrush/run.sh'"
+		command echo "   alias wrush='$APP_ROOT/run.sh'"
 		command echo ""
 		command echo "Change run.sh variable APP_ROOT with your wrush root"
-		command echo "/!\ Be careful on noexec on your system mount /!\"
+		command echo "/!\ Be careful on noexec on your system mount /!\\"
 		command echo ""
 		;;
 	*)
