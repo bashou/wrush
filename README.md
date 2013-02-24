@@ -1,4 +1,4 @@
-Wrush - Wordpress Common Line
+Wrush - Wordpress Command Line
 =====
 
 Welcome on, i think, to the first CLI dedicated to Wordpress.
