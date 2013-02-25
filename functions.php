@@ -98,22 +98,22 @@ function wrush_cron_posts($bdd, $prefix = "wp_", $multisite = "false") {
                         } else {
                                 $table_msql = $prefix.$ligne->blog_id."_posts";
                         }
-                        $resultat_sub = $bdd->query("SELECT ID, post_title, post_date FROM $table_msql WHERE post_status = 'future'");
+                        $resultat_sub = $bdd->query("SELECT ID, post_title, post_date_gmt FROM $table_msql WHERE post_status = 'future'");
                         $resultat_sub->setFetchMode(PDO::FETCH_OBJ);
 
                         echo $resultat_sub->rowCount()." found\n";
 
                         while( $ligne_sub = $resultat_sub->fetch() )
                         {
-                                if(posts_date_test($ligne_sub->post_date) == 2) {
+                                if(posts_date_test($ligne_sub->post_date_gmt) == 2) {
                                         $bdd->query("UPDATE $table_msql SET post_status='publish' WHERE ID = ".$ligne_sub->ID);
                                         $state = "[done]";                                                
-                                } elseif(posts_date_test($ligne_sub->post_date) == 1) {
+                                } elseif(posts_date_test($ligne_sub->post_date_gmt) == 1) {
                                         $state = "[scheduled]";
                                 } else {
                                         $state = "[too late dude!]";
                                 }
-                                echo "--> $state ".$ligne_sub->post_date." : ".$ligne_sub->post_title."\n";
+                                echo "--> $state ".$ligne_sub->post_date_gmt." GMT : ".$ligne_sub->post_title."\n";
                         }
                 }
         } else {
