@@ -1,5 +1,5 @@
 #!/bin/sh
-VERSION='1.0'
+VERSION='1.1'
 APP_ROOT="/path/to/wrush"
 TMP_WPCONFIG="/tmp/wrush_wp_vars.php"
 PWD=`pwd`
@@ -53,6 +53,10 @@ case "$1" in
 		command echo "crons - Launch planified tasks"
 		command echo "Options :"
 		command echo "wrush crons [all|(http://)domain.tld(/blog)] [user:password]"
+		command echo ""
+		command echo "cron-posts - Publish scheduled posts"
+		command echo "Options :"
+		command echo "none"
 		command echo ""
 		command echo "plugins - Get enabled plugins"
 		command echo "Options : none"
