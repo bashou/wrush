@@ -79,6 +79,41 @@ function wrush_blogs($bdd, $prefix = "wp_", $multisite = "false") {
         }
 }
 
+// Display informations returned by "cron-posts" option.
+function wrush_cron_posts($bdd, $prefix = "wp_", $multisite = "false") {
+        echo "Wordpress scheduled posts\n";
+        echo "---------------------------\n";
+
+        if($multisite == "true")
+        {
+                $resultat = $bdd->query("SELECT blog_id, domain, path FROM ".$prefix."blogs");
+                $resultat->setFetchMode(PDO::FETCH_OBJ);
+
+                while( $ligne = $resultat->fetch() )
+                {
+                        echo "- http://".$ligne->domain.$ligne->path." : ";
+                        echo "\n";
+
+                        $resultat_sub = $bdd->query("SELECT post_title, post_date FROM ".$prefix.$ligne->blog_id"_posts WHERE post_status = 'future'");
+                        $resultat_sub->setFetchMode(PDO::FETCH_OBJ);
+
+                        while( $ligne_sub = $resultat_sub->fetch() )
+                        {
+                                echo "--> ".$ligne_sub->post_date." : ".$ligne_sub->post_title.".\n";
+                        }
+                }
+        } else {
+                $resultat = $bdd->query("SELECT option_value FROM ".$prefix."options WHERE option_name = 'siteurl'");
+                $resultat->setFetchMode(PDO::FETCH_OBJ);
+
+                while( $ligne = $resultat->fetch() )
+                {
+                        echo "- ".$ligne->option_value;
+                        echo "\n";
+                }
+        }
+}
+
 // Display informations returned by "plugins" option.
 function wrush_plugins($bdd, $prefix = "wp_", $multisite = "false") {
         if($multisite == "false") {

@@ -6,7 +6,7 @@ PWD=`pwd`
 ROOT="$PWD/wp-config.php"
 
 case "$1" in
-	infos|blogs|crons|plugins)
+	infos|blogs|crons|cron-posts|plugins)
 		if [ ! -f $ROOT ];
 		then
 			command echo "Wrush v$VERSION : Developped by Nassim A. (http://nassi.me)"
