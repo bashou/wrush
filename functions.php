@@ -122,8 +122,26 @@ function wrush_cron_posts($bdd, $prefix = "wp_", $multisite = "false") {
 
                 while( $ligne = $resultat->fetch() )
                 {
-                        echo "- ".$ligne->option_value;
-                        echo "\n";
+                        echo "- ".$ligne->option_value." : ";
+
+                        $table_msql = $prefix."posts";
+                        $resultat_sub = $bdd->query("SELECT ID, post_title, post_date_gmt FROM $table_msql WHERE post_status = 'future'");
+                        $resultat_sub->setFetchMode(PDO::FETCH_OBJ);
+
+                        echo $resultat_sub->rowCount()." found\n";
+
+                        while( $ligne_sub = $resultat_sub->fetch() )
+                        {
+                                if(posts_date_test($ligne_sub->post_date_gmt) == 2) {
+                                        $bdd->query("UPDATE $table_msql SET post_status='publish' WHERE ID = ".$ligne_sub->ID);
+                                        $state = "[done]";                                                
+                                } elseif(posts_date_test($ligne_sub->post_date_gmt) == 1) {
+                                        $state = "[scheduled]";
+                                } else {
+                                        $state = "[too late dude!]";
+                                }
+                                echo "--> $state ".$ligne_sub->post_date_gmt." GMT : ".$ligne_sub->post_title."\n";
+                        }
                 }
         }
 }
@@ -298,10 +316,14 @@ function posts_date_test($date) {
         $minlate_date = $current_date + 60;
         $defined_date = strtotime($date);
 
+        # 2 : Done
+        # 1 : Scheduled
+        # 0 : Too Late
+
         if($defined_date >= $current_date && $defined_date <= $minlate_date) {
-                return 1;
-        } elseif($defined_date < $current_date) {
                 return 2;
+        } elseif($defined_date > $current_date) {
+                return 1;
         } else {
                 return 0;
         }
