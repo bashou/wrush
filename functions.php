@@ -94,7 +94,7 @@ function wrush_cron_posts($bdd, $prefix = "wp_", $multisite = "false") {
                         echo "- http://".$ligne->domain.$ligne->path." : ";
                         echo "\n";
 
-                        $resultat_sub = $bdd->query("SELECT post_title, post_date FROM ".$prefix.$ligne->blog_id"_posts WHERE post_status = 'future'");
+                        $resultat_sub = $bdd->query("SELECT post_title, post_date FROM ".$prefix.$ligne->blog_id."_posts WHERE post_status = 'future'");
                         $resultat_sub->setFetchMode(PDO::FETCH_OBJ);
 
                         while( $ligne_sub = $resultat_sub->fetch() )
