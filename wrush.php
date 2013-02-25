@@ -45,6 +45,10 @@ if($vars['state'])
 			wrush_crons($bdd, $vars['bdd_prefix'], $vars['wp_multisite']);
 		}
 		break;
+
+		case "cron-posts":
+		wrush_cron_posts($bdd, $vars['bdd_prefix'], $vars['wp_multisite']);
+		break;
 	}
 
 
