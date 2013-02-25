@@ -105,6 +105,11 @@ function wrush_cron_posts($bdd, $prefix = "wp_", $multisite = "false") {
                         while( $ligne_sub = $resultat_sub->fetch() )
                         {
                                 echo "--> ".$ligne_sub->post_date." : ".$ligne_sub->post_title.".\n";
+                                if(posts_date_test($ligne_sub->post_date)) {
+                                        echo "[done]";
+                                } else {
+                                        echo "[scheduled]";
+                                }
                         }
                 }
         } else {
@@ -282,6 +287,18 @@ function curl_request ($host, $path, $auth) {
         $result = $curl->exec();
 
         return $result;
+}
+
+function posts_date_test($date) {
+        $current_date = strtotime("now");
+        $minlate_date = strtotime("+1 min");
+        $defined_date = strtotime($date);
+
+        if($defined_date >= $current_date && $defined_date <= $minlate_date) {
+                return 1;
+        } else {
+                return 0;
+        }
 }
 
 ?>
