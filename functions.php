@@ -92,15 +92,15 @@ function wrush_cron_posts($bdd, $prefix = "wp_", $multisite = "false") {
                 while( $ligne = $resultat->fetch() )
                 {
                         echo "- http://".$ligne->domain.$ligne->path." : ";
-                        echo "\n";
 
                         if($ligne->path == '/') {
                                 $resultat_sub = $bdd->query("SELECT post_title, post_date FROM ".$prefix."posts WHERE post_status = 'future'");
                         } else {
                                 $resultat_sub = $bdd->query("SELECT post_title, post_date FROM ".$prefix.$ligne->blog_id."_posts WHERE post_status = 'future'");
                         }
-
                         $resultat_sub->setFetchMode(PDO::FETCH_OBJ);
+
+                        echo $resultat_sub->rowCount()." found\n";
 
                         while( $ligne_sub = $resultat_sub->fetch() )
                         {
