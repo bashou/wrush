@@ -110,6 +110,7 @@ function wrush_cron_posts($bdd, $prefix = "wp_", $multisite = "false") {
                                 } else {
                                         echo "[scheduled]";
                                 }
+                                echo "\n";
                         }
                 }
         } else {
