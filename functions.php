@@ -94,23 +94,26 @@ function wrush_cron_posts($bdd, $prefix = "wp_", $multisite = "false") {
                         echo "- http://".$ligne->domain.$ligne->path." : ";
 
                         if($ligne->path == '/') {
-                                $resultat_sub = $bdd->query("SELECT post_title, post_date FROM ".$prefix."posts WHERE post_status = 'future'");
+                                $table_msql = $prefix."posts";
                         } else {
-                                $resultat_sub = $bdd->query("SELECT post_title, post_date FROM ".$prefix.$ligne->blog_id."_posts WHERE post_status = 'future'");
+                                $table_msql = $prefix.$ligne->blog_id."_posts";
                         }
+                        $resultat_sub = $bdd->query("SELECT ID, post_title, post_date FROM $table_msql WHERE post_status = 'future'");
                         $resultat_sub->setFetchMode(PDO::FETCH_OBJ);
 
                         echo $resultat_sub->rowCount()." found\n";
 
                         while( $ligne_sub = $resultat_sub->fetch() )
                         {
-                                echo "--> ".$ligne_sub->post_date." : ".$ligne_sub->post_title.".\n";
-                                if(posts_date_test($ligne_sub->post_date)) {
-                                        echo "[done]";
+                                if(posts_date_test($ligne_sub->post_date) == 2) {
+                                        $bdd->query("UPDATE $table_msql SET post_status='publish' WHERE ID = ".$ligne_sub->ID);
+                                        $state = "[done]";                                                
+                                } elseif(posts_date_test($ligne_sub->post_date) == 1) {
+                                        $state = "[scheduled]";
                                 } else {
-                                        echo "[scheduled]";
+                                        $state = "[too late dude!]";
                                 }
-                                echo "\n";
+                                echo "--> $state ".$ligne_sub->post_date." : ".$ligne_sub->post_title."\n";
                         }
                 }
         } else {
@@ -292,11 +295,13 @@ function curl_request ($host, $path, $auth) {
 
 function posts_date_test($date) {
         $current_date = strtotime("now");
-        $minlate_date = strtotime("+1 min");
+        $minlate_date = $current_date + 60;
         $defined_date = strtotime($date);
 
         if($defined_date >= $current_date && $defined_date <= $minlate_date) {
                 return 1;
+        } elseif($defined_date < $current_date) {
+                return 2;
         } else {
                 return 0;
         }
